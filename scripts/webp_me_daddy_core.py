@@ -38,8 +38,16 @@ ATTRIBUTE_PATTERN = re.compile(r"([A-Za-z_:][-A-Za-z0-9_:]*)\s*=\s*(?:\"([^\"]*)
 def _resolve_transparent_gif_script() -> Path:
     override = os.environ.get("TRANSPARENT_GIF_LOOP_DIR")
     roots = [Path(override)] if override else []
-    roots.append(Path(__file__).resolve().parents[2] / "transparent-gif-loop")
-    roots.append(Path(__file__).resolve().parents[2] / "Transparent-Gif-Loop")
+    # Sibling checkout. Covers the public repo name, the bare tool name, and the
+    # casing git produces when cloning each.
+    siblings = Path(__file__).resolve().parents[2]
+    for name in (
+        "Transparent-Gif-Loop-Skill",
+        "transparent-gif-loop-skill",
+        "transparent-gif-loop",
+        "Transparent-Gif-Loop",
+    ):
+        roots.append(siblings / name)
     for root in roots:
         candidate = root / "scripts" / "process_gif.py"
         if candidate.exists():
