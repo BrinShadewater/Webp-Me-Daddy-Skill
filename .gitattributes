@@ -1,0 +1,9 @@
+# core.autocrlf is true globally on this host, which makes cross-checkout diffs
+# report every text file as modified. Pinning EOL avoids that churn.
+* text=auto eol=lf
+*.png binary
+*.jpg binary
+*.webp binary
+*.gif binary
+*.pdf binary
+*.ico binary

@@ -1,0 +1,4 @@
+interface:
+  display_name: "Webp Me Daddy"
+  short_description: "Recipe-driven WebP pipeline with metadata and linting"
+  default_prompt: "Use $webp-me-daddy to prepare a public image with the right recipe, metadata, sidecar, and paste-ready snippets."
