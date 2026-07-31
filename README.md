@@ -4,13 +4,38 @@ A recipe-driven WebP pipeline for website images. You tell it what the image is 
 
 Regrettable name. Genuinely useful tool.
 
-> **Private working copy** — this is the source behind the `webp-me-daddy` skill, kept in Git so the skill has a home and a history.
-
 ## 🎯 The Idea
 
 Most image tooling makes you specify dimensions, quality, and crop by hand for every asset, which means every site ends up with images that were each optimized slightly differently by a slightly different mood.
 
 This pipeline replaces that with **recipes**. A `hero-banner` and a `review-hero` and an `avatar` have different correct answers for size, crop bias, and compression, and those answers should live in the tool rather than in your head. Pick the recipe that matches the slot and the output is consistent across the whole site.
+
+## 📦 Install
+
+**As an agent skill** (Claude Code, Codex) — clone it into your skills directory so the
+agent picks up `SKILL.md`:
+
+```shell
+git clone https://github.com/BrinShadewater/Webp-Me-Daddy-Skill ~/.claude/skills/webp-me-daddy
+```
+
+Codex users: swap `~/.claude/skills` for `~/.codex/skills`. Then ask your agent to prepare,
+batch, audit, or lint images and it will use the recipes below.
+
+**Standalone** — it is a plain Python CLI, no agent required:
+
+```shell
+git clone https://github.com/BrinShadewater/Webp-Me-Daddy-Skill
+cd Webp-Me-Daddy-Skill
+python -m pip install Pillow
+python scripts/webp_me_daddy.py --help
+```
+
+The `animate` command additionally needs its companion tool, cloned as a sibling:
+
+```shell
+git clone https://github.com/BrinShadewater/Transparent-Gif-Loop-Skill
+```
 
 ## ⚙️ Requirements
 
