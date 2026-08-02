@@ -1,5 +1,7 @@
 # Webp Me Daddy 🖼️
 
+![Licence](https://img.shields.io/badge/licence-MIT-blue?style=flat-square) ![Python](https://img.shields.io/badge/python-3.11%2B-3776ab?style=flat-square) ![Claude Skill](https://img.shields.io/badge/Claude-skill-d97757?style=flat-square) ![Shadewater Labs](https://img.shields.io/badge/Shadewater%20Labs-%E2%9A%97%EF%B8%8F-6b4fa2?style=flat-square)
+
 A recipe-driven WebP pipeline for website images. You tell it what the image is *for*, not what to do to it, and it handles the rest: optimized variants, responsive sets, structured metadata, accessibility-safe alt text, framework snippets, and a manifest you can actually lint.
 
 Regrettable name. Genuinely useful tool.
