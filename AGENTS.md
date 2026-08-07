@@ -1,6 +1,7 @@
 # Webp Me Daddy — Agent Guide
 
-Agent-neutral. Claude and Codex both read this file; `CLAUDE.md` points here.
+Agent-neutral. Tools that read `AGENTS.md` load this file natively; Claude Code loads
+it through the `@`-import in `CLAUDE.md` beside it. Edit here, keep it agent-neutral.
 
 A recipe-driven **WebP pipeline for website images**: optimised variants, responsive sets,
 structured metadata, alt text, and lintable output contracts. Python 3 + Pillow.
