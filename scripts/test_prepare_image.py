@@ -85,6 +85,17 @@ class WebpMeDaddyTests(unittest.TestCase):
             )
         return result
 
+    def test_public_root_skips_the_windows_shared_profile(self) -> None:
+        sys.path.insert(0, str(SCRIPT_PATH.parent))
+        from webp_me_daddy_core import find_public_root
+
+        self.assertEqual(
+            find_public_root(Path("site") / "public" / "img" / "hero.webp"),
+            Path("site") / "public",
+        )
+        self.assertIsNone(find_public_root(Path("C:") / "Users" / "Public" / "Pictures" / "hero.webp"))
+        self.assertIsNone(find_public_root(Path("home") / "users" / "public" / "hero.webp"))
+
     def test_help_lists_subcommands(self) -> None:
         result = self.run_script("--help")
         self.assertIn("prepare", result.stdout)
