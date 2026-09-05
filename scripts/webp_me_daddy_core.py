@@ -1274,8 +1274,13 @@ def render_processed_preview(
 
 def find_public_root(path: Path) -> Path | None:
     for candidate in [path, *path.parents]:
-        if candidate.name.lower() == "public":
-            return candidate
+        if candidate.name.lower() != "public":
+            continue
+        # Windows' shared profile, C:\Users\Public, is not a site's public root.
+        # Treating it as one baked "/Pictures/hero.webp" into sidecars.
+        if candidate.parent.name.lower() == "users":
+            continue
+        return candidate
     return None
 
 
