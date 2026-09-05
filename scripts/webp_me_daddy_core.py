@@ -1215,14 +1215,13 @@ def render_image(
     lossless: bool,
     dry_run: bool,
 ) -> int | None:
-    if output_path.exists() and not dry_run:
-        try:
-            output_path.unlink()
-        except OSError:
-            pass  # FUSE filesystem; overwrite in-place
     if dry_run:
         return None
 
+    # The output used to be unlinked before anything was rendered, so an in-place
+    # re-encode (output == source) that failed mid-way lost the source. Render and
+    # encode to a sibling temp file first; the swap at the end is the only moment the
+    # old file is touched.
     fitted = render_processed_preview(
         source=source,
         width=width,
@@ -1233,13 +1232,20 @@ def render_image(
         focus_y=focus_y,
     )
     output_path.parent.mkdir(parents=True, exist_ok=True)
+    staged = output_path.with_name(f".{output_path.name}.tmp")
     fitted.save(
-        output_path,
+        staged,
         format="WEBP",
         quality=quality,
         method=6,
         lossless=lossless,
     )
+    try:
+        staged.replace(output_path)
+    except OSError:
+        # FUSE filesystems refuse the rename; fall back to writing in place.
+        output_path.write_bytes(staged.read_bytes())
+        staged.unlink()
     return output_path.stat().st_size
 
 

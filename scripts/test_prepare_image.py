@@ -85,6 +85,51 @@ class WebpMeDaddyTests(unittest.TestCase):
             )
         return result
 
+    def test_render_image_keeps_the_existing_file_when_rendering_fails(self) -> None:
+        """An in-place re-encode that fails must not have deleted the source first."""
+        sys.path.insert(0, str(SCRIPT_PATH.parent))
+        import webp_me_daddy_core as core
+        from unittest import mock
+
+        with tempfile.TemporaryDirectory() as tmp:
+            existing = Path(tmp) / "hero.webp"
+            Image.new("RGB", (8, 8), (200, 40, 40)).save(existing, format="WEBP")
+            before = existing.read_bytes()
+            with mock.patch.object(core, "render_processed_preview", side_effect=RuntimeError("decode failed")):
+                with self.assertRaises(RuntimeError):
+                    core.render_image(
+                        source=Image.new("RGB", (8, 8)),
+                        output_path=existing,
+                        width=4,
+                        height=4,
+                        fit_mode="cover",
+                        allow_upscale=False,
+                        focus_x=0.5,
+                        focus_y=0.5,
+                        quality=80,
+                        lossless=False,
+                        dry_run=False,
+                    )
+            self.assertEqual(existing.read_bytes(), before, "the original must survive a failed render")
+            self.assertEqual([p.name for p in Path(tmp).iterdir()], ["hero.webp"], "no temp file left behind")
+
+            size = core.render_image(
+                source=Image.new("RGB", (8, 8), (10, 10, 10)),
+                output_path=existing,
+                width=4,
+                height=4,
+                fit_mode="cover",
+                allow_upscale=False,
+                focus_x=0.5,
+                focus_y=0.5,
+                quality=80,
+                lossless=False,
+                dry_run=False,
+            )
+            self.assertGreater(size, 0)
+            self.assertNotEqual(existing.read_bytes(), before, "a successful render replaces the file")
+            self.assertEqual([p.name for p in Path(tmp).iterdir()], ["hero.webp"])
+
     def test_public_root_skips_the_windows_shared_profile(self) -> None:
         sys.path.insert(0, str(SCRIPT_PATH.parent))
         from webp_me_daddy_core import find_public_root
